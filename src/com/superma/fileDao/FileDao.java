@@ -158,8 +158,6 @@ public class FileDao {
         while((in.read(buffer)) != -1){
             out.write(buffer);
         }
-    
-        
     }
     //创建文件夹
     public static boolean mkDirectory(String path) {  
