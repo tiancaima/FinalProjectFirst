@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>制作微信小程序</title>
+
+		<link rel="shortcut icon" href="img/Logo.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="css/base.css" />
+		<link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css" />
+		<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+		<script type="text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/drag-arrange.js"></script>
+
+		<style type="text/css">
+			button {
+				color: #FFFFFF;
+				height: 38px;
+				line-height: 38px;
+				width: 95px;
+				border-radius: 10px;
+				background-color: #5874d8;
+				text-align: center;
+				cursor: pointer;
+			}
+			
+			.editorMainCon {
+				height: 100%;
+				width: 100%;
+				min-width: 1280px;
+				overflow: hidden;
+			}
+			
+			.top-bar {
+				height: 68px;
+				line-height: 68px;
+				background: #fff;
+				display: flex;
+				position: relative;
+				z-index: 2;
+				box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+			}
+			
+			.editor-logo {
+				width: 68px;
+				height: 100%;
+				flex-shrink: 0;
+				background: #333333 url(img/HBuilder.png) no-repeat;
+				background-size: 100%;
+			}
+			
+			.main-area {
+				width: calc(100% - 68px);
+				height: 100%;
+				display: inline-flex;
+				justify-content: space-between;
+				position: relative;
+				z-index: 1;
+			}
+			
+			.area-left {
+				margin-left: 28px;
+			}
+			
+			.area-center {
+				margin: 0 auto;
+			}
+			
+			.main-area-a1 {
+				margin-right: 20px;
+			}
+			
+			.main-area-a2 {}
+			
+			.editorWrapper {
+				height: calc(100% - 68px);
+				position: relative;
+				z-index: 1;
+			}
+			
+			.editorLeft {
+				position: absolute;
+				left: 0;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				transition: all .5s;
+				z-index: 1;
+				box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.10);
+			}
+			
+			.funOutPanel {
+				height: 100%;
+			}
+			
+			.funMainNav {
+				background: #273239;
+				display: inline-block;
+				vertical-align: top;
+				height: 100%;
+				float: left;
+			}
+			
+			.funMainNav-action {
+				color: #FFFFFF;
+				width: 68px;
+				height: 96px;
+				text-align: center;
+				cursor: pointer;
+			}
+			
+			.funMainNav-img {
+				display: block;
+				height: 24px;
+				width: 24px;
+				margin: 30px auto 12px;
+			}
+			
+			#funMainNav-action {
+				position: absolute;
+				top: 65px;
+				left: 48px;
+				transition: top 0.3s;
+			}
+			
+			#triangle {
+				margin-left: 10px;
+				height: 0;
+				width: 0;
+				border-top: 10px solid transparent;
+				border-right: 10px solid #FFFFFF;
+				border-bottom: 10px solid transparent;
+			}
+			
+			.funMainMenu {
+				display: inline-block;
+				background: #fff;
+				height: 100%;
+				width: 315px;
+			}
+			
+			.funMainMenu-page {
+				position: relative;
+			}
+			
+			.module-page-top {
+				height: 50px;
+				line-height: 50px;
+				border-bottom: 1px solid #eaeaea;
+				cursor: pointer;
+				background: #fff;
+				text-align: center;
+			}
+			
+			.module-page-module {
+				height: auto;
+				border-bottom: 1px solid #eaeaea;
+				overflow: hidden;
+				transition: height .2s;
+				max-height: 800px;
+				background: #fff;
+			}
+			
+			.module-page-ab {
+				display: inline-block;
+				width: 102px;
+				height: 85px;
+				border-right: 1px dashed #e1e1e1;
+				border-bottom: 1px dashed #e1e1e1;
+				margin-bottom: -1px;
+				margin-right: -1px;
+				cursor: pointer;
+			}
+			
+			.module-page-img {
+				height: 25px;
+				width: 30px;
+				margin: 16px auto 5px auto;
+				cursor: pointer;
+				margin-bottom: 10px;
+			}
+			
+			.module-page-text {
+				width: 100%;
+				text-align: center;
+				display: inline-block;
+			}
+			
+			.control-page-module {
+				margin: 20px 15px;
+			}
+			
+			.control-page-item {
+				padding: 10px;
+				margin: 12px 0;
+				border: 1px solid #e8eae9;
+				border-radius: 4px;
+				position: relative;
+				background-color: #fafafa;
+			}
+			
+			.mainColorSwitch {
+				padding: 20px 15px 0;
+			}
+			
+			.colorSwitch {
+				display: inline-block;
+				width: 26px;
+				height: 19px;
+				margin-right: 9px;
+				border-radius: 3px;
+				transition: all .3s;
+			}
+			
+			.colorSwitch:hover {
+				height: 26px;
+			}
+			
+			.page-list {
+				padding: 15px 15px 0;
+			}
+			
+			.page-list-item {
+				color: #000000;
+				height: 41px;
+				line-height: 42px;
+				padding-left: 10px;
+				padding-right: 12px;
+				margin-bottom: 12px;
+				border: 1px solid #e8eae9;
+				border-radius: 4px;
+				background-color: #fafafa;
+				font-size: 13px;
+			}
+			/*App部分css*/
+			
+			.editorMain {
+				position: absolute;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+				transition: transform 300ms;
+				background-color: #CCCCCC;
+			}
+			
+			.editorMain-content {
+				position: absolute;
+				top: 0;
+				left: 383px;
+				height: 100%;
+				width: calc(100% - 383px - 405px);
+				z-index: 2;
+			}
+			
+			.mainApp {
+				width: 375px;
+				height: 667px;
+				position: absolute;
+				left: 50%;
+				top: 6%;
+				margin-left: -190px;
+				background: #fff;
+			}
+			
+			.editorMain-tital {
+				height: 49px;
+				line-height: 49px;
+				border-bottom: 1px solid #eee;
+				font-size: 17px;
+				text-align: center;
+				position: relative;
+			}
+			
+			.heidden {
+				width: 375px;
+				height: calc(100% - 50px - 50px);
+				overflow: hidden;
+			}
+			
+			.editorMain-Con {
+				height: 100%;
+				width: 390px;
+				overflow-y: scroll;
+				overflow-x: hidden;
+				/*overflow-x: hidden;*/
+				padding-right: 50px;
+			}
+			
+			.editorMain-Con-con {
+				width: 100%;
+			}
+			
+			.editorMain-Con-con:hover {
+				border: 1px dashed blue;
+			}
+			
+			.editorMain-Bottom {
+				width: 100%;
+				height: 50px;
+				position: absolute;
+				bottom: 0;
+				border-top: 1px solid #eee;
+				box-sizing: border-box;
+				display: flex;
+				justify-content: space-around;
+			}
+			
+			.editorMain-Bottom-item {
+				margin: auto 0;
+				cursor: pointer;
+			}
+			
+			.mainTital {
+				height: 50px;
+				line-height: 50px;
+				border-bottom: 1px solid #f0f0f0;
+				text-align: center;
+				font-size: 15px;
+				color: #353535;
+				background-color: #fff;
+			}
+			
+			.mainContent {
+				width: 100%;
+				height: 335px;
+			}
+			
+			.mainContent-text {
+				height: 40px;
+				width: 150px;
+			}
+			
+			.mainContent-butt {
+				height: 38px;
+				line-height: 38px;
+				width: 100px;
+				text-align: center;
+				color: #FFFFFF;
+				background-color: red;
+				border-radius: 13px;
+			}
+			/*右边设置菜单栏*/
+			
+			.editorRight {
+				position: absolute;
+				top: 0;
+				right: 0;
+				height: 100%;
+				width: 405px;
+				padding: 0;
+				background-color: #fff;
+				z-index: 3;
+				box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.10);
+			}
+			
+			.editorRight-Setting-Nav {
+				height: 56px;
+				line-height: 56px;
+				border-bottom: 1px solid #f1f1f1;
+				background-color: #fbfbfb;
+				text-align: center;
+			}
+			
+			.editor-item {
+				width: 100%;
+				margin: 40px auto;
+				padding: 0px 0px 0px 50px;
+			}
+			
+			.editor-item {
+				margin-bottom: 15px;
+				display: flex;
+			}
+			
+			.item-content {
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--顶部功能-->
+		<div class="editorMainCon" id="editorMainCon">
+			<div class="top-bar" id="top-bar">
+				<div class="editor-logo"></div>
+				<div class="main-area">
+					<div class="area-left">
+						<a href="" class="main-area-a1">管理小程序</a>
+						<a href="" class="main-area-a2">更换小程序模板</a>
+					</div>
+					<div class="area-center">
+						<button class="area-center-publish">审核发布</button>
+					</div>
+					<div class="area-right">
+						<button class="area-left-save">保存</button>
+						<button class="area-left-watch">预览</button>
+					</div>
+				</div>
+			</div>
+			<!--主要功能-->
+			<div class="editorWrapper" id="editorWrapper">
+				<!--左边栏-->
+				<div class="editorLeft" id="editorLeft">
+					<div class="funOutPanel">
+						<div class="funMainNav">
+							<div class="funMainNav-module funMainNav-action">
+								<span id="funMainNav-module-img" class="funMainNav-img"></span>
+								<span>模块</span>
+							</div>
+							<div class="funMainNav-control funMainNav-action">
+								<span id="funMainNav-control-img" class="funMainNav-img"></span>
+								<span>控件</span>
+							</div>
+							<div class="funMainNav-page funMainNav-action">
+								<span id="funMainNav-page-img" class="funMainNav-img"></span>
+								<span>页面</span>
+							</div>
+							<div id="funMainNav-action">
+								<div id="triangle"></div>
+							</div>
+						</div>
+						<div class="funMainMenu">
+							<!--模块页面-->
+							<div class="module-page funMainMenu-page">
+								<div class="module-page-top">
+									<span>常用模块</span>
+								</div>
+								<div class="module-page-module">
+									<div class="module-page-ab" id="text">
+										<div class="module-page-img" id="module-img1"></div>
+										<div class="module-page-text1 module-page-text">文本</div>
+									</div>
+									<div class="module-page-ab" id="img">
+										<div class="module-page-img" id="module-img2"></div>
+										<div class="module-page-text2 module-page-text">图片</div>
+									</div>
+									<div class="module-page-ab" id="butt">
+										<div class="module-page-img" id="module-img3"></div>
+										<div class="module-page-text3 module-page-text">按钮</div>
+									</div>
+									<div class="module-page-ab" id="freecon">
+										<div class="module-page-img" id="module-img4"></div>
+										<div class="module-page-text4 module-page-text">自由容器</div>
+									</div>
+									<div class="module-page-ab" id="manyimg">
+										<div class="module-page-img" id="module-img5"></div>
+										<div class="module-page-text5 module-page-text">多图文</div>
+									</div>
+								</div>
+							</div>
+
+							<!--控件页面-->
+							<div class="control-page funMainMenu-page" style="display: none;">
+								<div class="control-page-module">
+									<div class="control-page-wrap">
+										<div class="control-page-item control-page-item-ab1">
+											<input type="checkbox" class="control-page-input" />
+											<span>头部</span>
+										</div>
+										<div class="control-page-item control-page-item-ab2">
+											<input type="checkbox" class="control-page-input" />
+											<span>导航</span>
+										</div>
+										<div class="control-page-item control-page-item-ab2">
+											<input type="checkbox" class="control-page-input" />
+											<span>侧边客服</span>
+										</div>
+										<div class="control-page-item control-page-item-ab4">
+											<input type="checkbox" class="control-page-input" />
+											<span>制作信息</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!--页面页面-->
+							<div class="page-page funMainMenu-page" style="display: none;">
+								<div class="mainColorSwitch">
+									<div class="colorSwitch" style="background-color: rgb(222, 68, 58); height: 26px;"></div>
+									<div class="colorSwitch" style="background-color: rgb(58, 130, 248);"></div>
+									<div class="colorSwitch" style="background-color: rgb(51, 51, 51);"></div>
+									<div class="colorSwitch" style="background-color: rgb(86, 187, 55);"></div>
+									<div class="colorSwitch" style="background-color: rgb(237, 93, 41);"></div>
+									<div class="colorSwitch" style="background-color: rgb(235, 52, 119);"></div>
+									<div class="colorSwitch" style="background-color: rgb(245, 180, 62);"></div>
+								</div>
+								<div class="page-list">
+									<div class="page-list-item">
+										<div class="page-list-item-text">首页</div>
+									</div>
+									<div class="page-list-item">
+										<div class="page-list-item-text">案例</div>
+									</div>
+									<div class="page-list-item">
+										<div class="page-list-item-text">关于我们</div>
+									</div>
+								</div>
+								<div class="addPage"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--中间显示小程序部分-->
+				<div class="editorMain" id="editorMain">
+					<div id="editorMain-content" class="editorMain-content">
+						<div id="mainApp" class="mainApp">
+							<div class="editorMain-tital">
+								<span>首页</span>
+							</div>
+							<div class="heidden">
+								<!--第一个页面内容-->
+								<div class="editorMain-Con" id="editorMain-Con1">
+									<!--自由容器-->
+									<div class="editorMain-Con-con" id="content22">
+										<!--自由容器标题-->
+										<div class="mainTital">
+											<span class="mainTital-text">标题内容1</span>
+										</div>
+										<!--自由容器内容-->
+										<div class="mainContent">
+											<!--可输入内容-->
+											<div class="mainContent-text" id="mainContent-text22">双击输入内容...</div>
+											<!--内容按钮-->
+											<div class="mainContent-butt" id="mainContent-butt22">按钮</div>
+											<!--图片-->
+											<img class="mainContent-img" id="mainContent-img22" src="img/HBuilder.png" />
+										</div>
+									</div>
+									<div class="editorMain-Con-con" id="content23">
+										<div class="mainTital">
+											<span class="mainTital-text">标题内容2</span>
+										</div>
+										<div class="mainContent">
+											<!--可输入内容-->
+											<div class="mainContent-text" id="mainContent-text23">双击输入内容...</div>
+											<!--内容按钮-->
+											<div class="mainContent-butt" id="mainContent-butt23">按钮</div>
+											<!--图片-->
+											<img class="mainContent-img" id="mainContent-img23" src="img/HBuilder.png" />
+										</div>
+									</div>
+									<div class="editorMain-Con-con" id="content24">
+										<div class="mainTital" style="display: none;">
+											<span class="mainTital-text">标题内容3</span>
+										</div>
+										<div class="mainContent">
+											<!--可输入内容-->
+											<div class="mainContent-text" id="mainContent-text24">双击输入内容...</div>
+											<!--内容按钮-->
+											<div class="mainContent-butt" id="mainContent-butt24">按钮</div>
+											<!--图片-->
+											<img class="mainContent-img" id="mainContent-img24" src="img/HBuilder.png" />
+										</div>
+									</div>
+								</div>
+								<!--第二个页面内容-->
+								<div class="editorMain-Con" id="editorMain-Con2" style="display: none;">
+									<div class="editorMain-Con-con" id="content25">
+										<div class="mainTital">
+											<span class="mainTital-text">标题内容4</span>
+										</div>
+										<div class="mainContent">
+											<!--可输入内容-->
+											<div class="mainContent-text" id="mainContent-text25">双击输入内容...</div>
+											<!--内容按钮-->
+											<div class="mainContent-butt" id="mainContent-butt25">按钮</div>
+											<!--图片-->
+											<img class="mainContent-img" id="mainContent-img25" src="img/HBuilder.png" />
+										</div>
+									</div>
+								</div>
+								<!--第三个页面内容-->
+								<div class="editorMain-Con" id="editorMain-Con3" style="display: none;">
+									<div class="editorMain-Con-con" id="content26">
+										<div class="mainTital">
+											<span class="mainTital-text">标题内容5</span>
+										</div>
+										<div class="mainContent">
+											<!--可输入内容-->
+											<div class="mainContent-text" id="mainContent-text26">双击输入内容...</div>
+											<!--图片-->
+											<img class="mainContent-img" id="mainContent-img26" src="img/HBuilder.png" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="editorMain-Bottom">
+								<div class="editorMain-Bottom-item" id="editorMain-Bottom-item1">首页</div>
+								<div class="editorMain-Bottom-item" id="editorMain-Bottom-item2">案例</div>
+								<div class="editorMain-Bottom-item" id="editorMain-Bottom-item3">关于我们</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--右边设置-->
+				<div class="editorRight" id="editorRight">
+					<div class="editorRight-Setting" id="free-Setting">
+						<div class="editorRight-Setting-Nav">自由容器设置</div>
+						<div class="editorRight-Setting-Con">
+							<div class="editor-item">
+								<div class="item-lab">模块标题：</div>
+								<div class="item-content">
+									<input class="free-text" type="text" maxlength="50" value="标题内容" style="text-align: center;" />
+								</div>
+							</div>
+							<div class="editor-item">
+								<div class="free-tital">
+									<p>标题栏： 显示：<input type="radio" name="title" value="1" id="freeTitle1" checked="checked" />&nbsp;&nbsp;&nbsp;隐藏： <input type="radio" name="title" value="0" id="freeTitle2" /></p>
+								</div>
+							</div>
+							<div class="editor-item" style="padding: 0;">
+								<button class="free-delete" style="background-color: #FF0000; margin: auto;">删除</button>
+							</div>
+						</div>
+					</div>
+
+					<!--第一个功能组件-->
+					<div class="editorRight-Setting" style="display: none;"></div>
+					<!--第二个功能组件-->
+					<div class="editorRight-Setting" style="display: none;"></div>
+					<!--第三个功能组件-->
+					<div class="editorRight-Setting" style="display: none;"></div>
+				</div>
+			</div>
+
+		</div>
+
+		<script type="text/javascript">
+			var pagenub = 3; //页面数量
+			var pagenubb = 3; //页面编号
+			var keypage = 1; //当前选定页面
+
+			var connub = 3; //自由容器个数
+			var connubb = 0; //自由容器编号
+			var keycontent = "content22"; //当前选定自由容器
+
+			var buttnub = 4; //按钮个数
+			var buttnubb = 0; //按钮编号
+			var keybutt; //当前选定按钮
+
+			var textnub = 5; //文本框个数
+			var textnubb = 0; //文本框编号
+			var keytext; //当前选定文本框
+
+			var imgnub = 5; //图片个数
+			var imgnubb = 0; //图片编号
+			var keyim; //当前选定图片
+			$(function() {
+
+				//自由容器设置
+
+				$("#editorMain-Con" + keypage).on("click", ".editorMain-Con-con", function() {
+					keycontent = $(this).attr("id");
+					$(".free-text").val($("#" + keycontent + " .mainTital-text").text());
+					if($("#" + keycontent + " .mainTital").is(":hidden")) {
+						$(".free-text").attr("disabled", "disabled");
+						$(".free-text").val("不可输入");
+						$("#freeTitle2").click();
+					} else {
+						$(".free-text").removeAttr("disabled");
+						$(".free-text").val($("#" + keycontent + " .mainTital-text").text());
+						$("#freeTitle1").click();
+					}
+				});
+
+				$(".free-text").keyup(function() {
+					//点击后焦点内容框
+					$("#" + keycontent + " .mainTital-text").text($(".free-text").val());
+				});
+				$("#freeTitle1").click(function() {
+					$("#" + keycontent + " .mainTital").show();
+					$(".free-text").val($("#" + keycontent + " .mainTital-text").text());
+					$(".free-text").removeAttr("disabled");
+				});
+				$("#freeTitle2").click(function() {
+					$("#" + keycontent + " .mainTital").hide();
+					$(".free-text").val("不可输入");
+					$(".free-text").attr("disabled", "disabled");
+				});
+				$(".free-delete").click(function() {
+					$("#" + keycontent).remove();
+				});
+				//				自由容器拖动设置
+				$(".editorMain-Con-con").arrangeable();
+
+				//				输入文字设置
+				$(".mainContent-text").dblclick(function() {
+					$(".mainContent-text").attr("contenteditable", "true");
+				});
+				//				$(".mainContent-text").resizable({
+				//					containment: ".mainContent"
+				//				});
+
+				//				$(".mainContent-text").arrangeable(function(e) {
+				//					event.stopPropagation();
+				//				});
+
+				//				按钮拖动设置
+
+				$(".mainContent-butt").draggable();
+
+				//				左面边框动作
+				$(".funMainNav-module").click(function() {
+					$(".module-page").fadeIn(300);
+					$(".page-page").hide();
+					$(".control-page").hide();
+					$("#funMainNav-action").css("top", "65px");
+				});
+				$(".funMainNav-control").click(function() {
+					$(".module-page").hide();
+					$(".page-page").hide();
+					$(".control-page").fadeIn(300);
+					$("#funMainNav-action").css("top", "190px");
+				});
+				$(".funMainNav-page").click(function() {
+					$(".module-page").hide();
+					$(".page-page").fadeIn(300);
+					$(".control-page").hide();
+					$("#funMainNav-action").css("top", "320px");
+				});
+
+				//功能模块的添加
+				$("#freecon").click(function() {
+					//生成自由容器
+					$("#editorMain-Con" + keypage).append("<div class='editorMain-Con-con' id='content" + connubb + "'><div class='mainTital'><span class='mainTital-text'>标题内容</span></div><div class='mainContent'" + connubb + "></div></div>");
+					$(".editorMain-Con-con").arrangeable();
+					keycontent = "content" + connubb;
+					connub++;
+					connubb++;
+				});
+				$("#text").click(function() {
+					//生成文本框
+					$("#" + keycontent + " .mainContent").append("<div class='mainContent-text' id='content-text" + textnubb + "'>双击输入内容...</div>");
+					$("#content-text" + textnubb).dblclick(function() {
+						$("#content-text" + textnubb).attr("contenteditable", "true");
+					});
+					//					var k = "#" + keycontent + " .mainContent";
+					//					$("#content-text" + textnubb).resizable({
+					//						containment: k
+					//					});
+					textnub++;
+					textnubb++;
+				});
+
+				//小程序bottom动作/页面切换
+				$(".mainApp").on("click", ".editorMain-Bottom-item", function() {
+					for(var i = 1; i <= pagenub; i++) {
+						var str = $(this).attr("id");
+						if(str.charAt(str.length - 1) == i) {
+							$("#editorMain-Con" + i).show();
+							keypage = i;
+						} else {
+							$("#editorMain-Con" + i).hide();
+						}
+					}
+				})
+
+				$("#butt").click(function() {
+					//生成按钮
+					$("#" + keycontent + " .mainContent").append("<div class='mainContent-butt' id='mainContent-butt" + buttnubb + "'>按钮</div>");
+
+				});
+
+				//顶部动作（数据传输）
+
+				//异步传输
+				$(".area-center-publish").click(function() {
+					$.ajax({
+						type: "post", //数据发送的方式（post 或者 get）
+						url: "com.superma.servlet/Myservlet", //指定servlet的地址
+						async: true,
+						data: {
+							value: jsondata
+						}, //要发送的数据（参数）
+						dataType: "text", //后台处理后返回的数据格式
+						success: function(data) { //ajax请求成功后触发的方法
+							alert("请求成功");
+						},
+						error: function(msg) { //ajax请求失败后触发的方法
+							alert("请求失败"); //弹出错误信息
+						}
+					});
+				});
+
+			});
+		</script>
+
+		<script type="text/javascript">
+			//数据传输
+			var jsondata = {
+				"pagenumber": pagenub
+			};
+			$(function(){
+					//保存按钮动作
+				$(".area-left-save").click(function() {
+
+					//每个页面有多少个自由容器和里面内容
+					for(var p = 1; p <= pagenub; p++) {
+						
+						var k =  jsondata["pagecontent" + p] = [];
+						var number = 0; //每个页面有多少个自由容器
+						
+						$("#editorMain-Con" + p).children(".editorMain-Con-con").each(function() {
+							number++;
+						})
+						console.log(number);
+						for(var i = 0; i < number; i++) {
+
+							var temjson = {};
+							var tailtext; //每个自由容器标题
+							if($("#editorMain-Con" + p + " .mainTital").eq(i).css("display") == "none") {
+								tailtext = "";
+							} else {
+								tailtext = $("#editorMain-Con" + p + " .mainTital-text").eq(i).text();
+							}
+							var conlist = []; //每一个自由框内容
+							$("#editorMain-Con" + p + " .mainContent").eq(i).children().each(function() {
+								conlist.push($(this).attr("id"));
+							});
+							temjson["text"] = tailtext;
+							temjson["conlist"] = conlist;
+							k.push(temjson);
+						}	
+					}
+
+					//Text内容获取
+					jsondata["text"] = [];
+					var textjson = {};
+					for(var i = 0; i < textnub; i++) {
+						var textjson = {};
+						textjson["id"] = $(".mainContent-text").eq(i).attr("id");
+						textjson["top"] = "1px";
+						textjson["left"] = "1px";
+						textjson["width"] = "50px";
+						textjson["height"] = "100px";
+						textjson["text"] = $(".mainContent-text").eq(i).text();
+						textjson["textsize"] = $(".mainContent-text").eq(i).css("font-size");
+						textjson["textstyle"] = "center";
+						jsondata.text.push(textjson);
+					}
+
+					//Button内容获取
+					jsondata["button"] = [];
+					
+					for(var i = 0; i < buttnub; i++) {
+						var buttonjson = {};
+						
+						buttonjson["id"] = $(".mainContent-butt").eq(i).attr("id");
+						buttonjson["top"] = "1px";
+						buttonjson["left"] = "1px";
+						buttonjson["width"] = $(".mainContent-butt").eq(i).css("width");
+						buttonjson["height"] = $(".mainContent-butt").eq(i).css("height");
+						buttonjson["text"] = $(".mainContent-butt").eq(i).text();
+						buttonjson["textsize"] = $(".mainContent-butt").eq(i).css("font-size");
+						buttonjson["textcolor"] = $(".mainContent-butt").eq(i).css("color");
+						buttonjson["buttonstyle"] = "1";
+						buttonjson["buttoncolor"] = $(".mainContent-butt").eq(i).css("background-color");
+						jsondata.button.push(buttonjson);
+					}
+
+					//Picture内容获取
+					jsondata["picture"] = [];
+					
+					for(var i = 0; i < imgnub; i++) {
+						var picturejson = {};
+						
+						picturejson["id"] = $(".mainContent-img").eq(i).attr("id");
+						picturejson["top"] = "1px";
+						picturejson["left"] = "1px";
+						picturejson["width"] = $(".mainContent-img").eq(i).css("width");
+						picturejson["height"] = $(".mainContent-img").eq(i).css("height");
+						picturejson["src"] = $(".mainContent-img").eq(i).attr("src");
+						jsondata.picture.push(picturejson);
+					}
+
+					jsondata = JSON.stringify(jsondata);
+					console.log(jsondata);
+					alert("数据保存成功！");
+				});
+				});
+				
+				
+		</script>
+
+		<!-- 测试专用输出 -->
+		<script type="text/javascript">
+			$(function() {
+				//				console.log($(".mainContent-img").eq(1).attr("src"));
+			});
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,17 @@
+[ 
+{ 
+"name":"马一斌", 
+"sex":"男", 
+"email":"zhangguoli@123.com"
+}, 
+{ 
+"name":"马二斌", 
+"sex":"女", 
+"email":"zhangtieli@123.com"
+}, 
+{ 
+"name":"马三斌", 
+"sex":"男", 
+"email":"zhenjie@123.com"
+} 
+] 

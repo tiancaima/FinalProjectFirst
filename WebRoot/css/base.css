@@ -1,0 +1,91 @@
+html,
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+input,
+em,
+textarea,
+p,
+th,
+td,
+span {
+	margin: 0px;
+	padding: 0px;
+}
+
+body,
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+	font: 14px/1.5 "微软雅黑", '宋体', STHeiTi, Arial, Helvetica, sans-serif;
+	color: #333;
+	text-align: left;
+	border: none;
+	outline: none;
+}
+
+body {
+	background-color: #fff;
+}
+
+p {
+	line-height: 21px;
+}
+
+img,
+a img,
+fieldset,
+button,
+input {
+	border: none;
+	vertical-align: middle;
+}
+
+
+/*section,article,aside,header,footer,nav,dialog,figure{display:block;}*/
+
+ol,
+ul,
+li {
+	list-style-type: none;
+}
+
+a {
+	color: #000000;
+	text-decoration: none;
+}
+
+/*清除浮动的类*/
+
+.clearfix {
+	zoom: 1;
+}
+
+.clearfix:after {
+	content: "";
+	height: 0;
+	visibility: hidden;
+	font-size: 0;
+	line-height: 0;
+	display: block;
+	clear: both;
+}
